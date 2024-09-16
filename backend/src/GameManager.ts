@@ -80,6 +80,7 @@ export class GameManager {
                     socket.send(JSON.stringify({
                         type: "invalid_access"
                     }));
+                    return;
                 }
                 
                 const game = this.games[gameCode];
@@ -87,9 +88,10 @@ export class GameManager {
                 const res = game?.makeMove(socket, move.player, move.position);
                 if(res?.validMove==false) {
                     socket.send(JSON.stringify(res));
+                    return;
                 }
-                if(gamePlayers[0]!=socket) gamePlayers[0]?.send(JSON.stringify(res));
-                if(gamePlayers[1]!=socket) gamePlayers[1]?.send(JSON.stringify(res));
+                gamePlayers[0]?.send(JSON.stringify(res));
+                gamePlayers[1]?.send(JSON.stringify(res));
 
                 if(res?.gameEnds==true) {
                     delete this.gamesPlayers[gameCode];
