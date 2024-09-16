@@ -1,9 +1,11 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RecoilRoot } from 'recoil'
+import { Buffer } from 'buffer';
 import App from './App.tsx'
 import './index.css'
 import './fonts.css';
+globalThis.Buffer = Buffer;
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

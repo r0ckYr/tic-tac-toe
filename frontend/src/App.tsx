@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil';
 import { socketState } from './atoms/atom';
 import { Landing } from './pages/Landing';
 import { GamePage } from './pages/GamePgae';
+import { WalletConnect } from './components/WalletConnect';
 
 function App() {
   const [_socket, setSocket] = useRecoilState(socketState);
@@ -32,6 +33,9 @@ function App() {
       position: 'sticky',
       top: '0px'
     }}>
+      <div className="fixed top-2 right-2 rounded-full">
+        <WalletConnect/>
+      </div>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Landing />} />
