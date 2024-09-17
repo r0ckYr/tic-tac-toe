@@ -1,17 +1,23 @@
 import { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { codeState, moneyState, playerState } from '../atoms/atom';
+import { useRecoilState } from 'recoil';
 
 const NETWORK = "https://api.devnet.solana.com";
-const GAME_WALLET_PUBLIC_KEY = "6264vVvtWg8CqBRegBt83ttcPPK61LurXNs7cqF56Gf5";
+const GAME_WALLET_PUBLIC_KEY = "FhNZ5dafuzZLQXixkvRd2FP4XsDvmPyzaHnQwEtA1mPT";
 const DEPOSIT_AMOUNT = 0.1;
 
 export const WalletConnect = () => {
+    const [code] = useRecoilState(codeState);
+    const [moneyDeposited, setMoneyDeposited] = useRecoilState(moneyState);
+    const [player] = useRecoilState(playerState);
+
     const [walletAddress, setWalletAddress] = useState<string | null>(null);
     const [connection, setConnection] = useState<Connection | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | null>(null);
-    const [moneyDeposited, setMoneyDeposited] = useState<boolean>(false);
 
     useEffect(() => {
         const conn = new Connection(NETWORK);
@@ -128,10 +134,29 @@ export const WalletConnect = () => {
             if (confirmation.value.err) {
                 throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`);
             }
-    
-            console.log("Deposit successful: ", signature);
-            setMoneyDeposited(true);
-            await fetchBalance(); // Refresh balance after successful deposit
+
+            // confirm from backend
+            try {
+                const response = await axios.post('http://localhost:3000/api/verifyPayment', {
+                    signature,
+                    expectedAmount: DEPOSIT_AMOUNT,
+                    code,
+                    walletAddress,
+                    type: "tictactoe",
+                    player
+                });
+                
+                if (response.status === 200) {
+                    console.log("Deposit successful and verified: ", signature);
+                    setMoneyDeposited(true);
+                    await fetchBalance();
+                } else {
+                    throw new Error("Backend verification failed");
+                }
+            } catch (verificationError) {
+                console.error("Error verifying payment:", verificationError);
+                setError(`Deposit successful, but verification failed: ${verificationError}`);
+            }
         } catch (error: any) {
             console.error("Error depositing:", error);
             setError(`Deposit failed: ${error.message}`);

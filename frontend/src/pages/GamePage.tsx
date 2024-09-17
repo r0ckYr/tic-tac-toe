@@ -1,12 +1,12 @@
 import '../App.css';
-// import { Board} from "../components/Board";
-// import { Popup } from '@repo/ui/Popup';
 import { useRecoilState } from "recoil";
-import { playerState } from "../atoms/atom";
+import { playerState, moneyState } from "../atoms/atom";
 import TicTacToe from '../components/TicTacToe';
+import { WalletConnect } from '../components/WalletConnect';
 
 export const GamePage = () => {
     const [player, _setPlayer] = useRecoilState(playerState);
+    const [moneyDeposited] = useRecoilState(moneyState);
     
     return (
         <div className="w-screen h-screen flex justify-center items-center">
@@ -15,7 +15,9 @@ export const GamePage = () => {
                     {player}
                 </div>
             }
-            <TicTacToe/>
+            {(moneyDeposited) ? 
+                <TicTacToe/> : 
+                <WalletConnect/>}
         </div>
     );
 };

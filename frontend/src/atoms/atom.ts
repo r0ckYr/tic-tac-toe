@@ -14,3 +14,8 @@ export const codeState = atom<string>({
     key: 'codeState',
     default: '',
 });
+
+export const moneyState = atom<boolean>({
+    key: 'moneyState',
+    default: false,
+});

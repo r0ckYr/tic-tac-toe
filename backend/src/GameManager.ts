@@ -93,6 +93,10 @@ export class GameManager {
                 gamePlayers[0]?.send(JSON.stringify(res));
                 gamePlayers[1]?.send(JSON.stringify(res));
 
+                // if(res.gameEnds) {
+
+                // }
+
                 if(res?.gameEnds==true) {
                     delete this.gamesPlayers[gameCode];
                     delete this.games[gameCode];
