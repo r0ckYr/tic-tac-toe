@@ -10,15 +10,13 @@ const GAME_WALLET_PUBLIC_KEY = process.env.GAME_WALLET_PUBLIC_KEY;
 
 router.post("/verifyPayment", async (req: any, res: any) => {
     const paymentDetails = req.body;
-
+    console.log(paymentDetails);
     if(!paymentDetails || !paymentDetails.signature || !paymentDetails.expectedAmount || !paymentDetails.code || !paymentDetails.player || !paymentDetails.walletAddress || !paymentDetails.type) {
-        console.log("error in thia")
         res.status(400).json({
             message: "Failed to verify payment!!"
         });
         return;
     }
-    console.log ( paymentDetails.signature + paymentDetails.expectedAmount + paymentDetails.code + paymentDetails.player + paymentDetails.walletAddress + paymentDetails.type);
 
     if(GAME_WALLET_PUBLIC_KEY == undefined) {
         res.status(500).json({

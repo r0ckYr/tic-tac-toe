@@ -1,5 +1,6 @@
 import { WebSocket } from "ws";
 import { TicBoard, GameBoard } from "./Game";
+import { handleGameEnd } from "./utils/handlegameEnd";
 
 interface GamePlayerCollection {
     [key: string]: WebSocket[];
@@ -19,7 +20,7 @@ export class GameManager {
     }
 
     handleMessages(socket: WebSocket) {
-        socket.on("message", (data) => {
+        socket.on("message", async (data) => {
             const message = JSON.parse(data.toString());
 
             if(message.type === "init_game") {
@@ -75,6 +76,7 @@ export class GameManager {
                 const move = message.move;
                 const gameCode = message.gameCode;
                 const gamePlayers = this.gamesPlayers[gameCode];
+
                 // If player doesn't match
                 if(gamePlayers[0]!=socket && gamePlayers[1]!=socket) {
                     socket.send(JSON.stringify({
@@ -93,11 +95,21 @@ export class GameManager {
                 gamePlayers[0]?.send(JSON.stringify(res));
                 gamePlayers[1]?.send(JSON.stringify(res));
 
-                // if(res.gameEnds) {
+                if(res && res.gameEnds==true) {
+                    const success = await handleGameEnd(res, gameCode+"tictactoe");
 
-                // }
+                    if(success) {
+                        gamePlayers[0]?.send(JSON.stringify({
+                            type: "transfer_success"
+                        }))
+                        gamePlayers[1]?.send(JSON.stringify({
+                            type: "transfer_success"
+                        }))
+                    } else {
+                        // add some logic hare
+                        console.log("payment uncessfull");
+                    }
 
-                if(res?.gameEnds==true) {
                     delete this.gamesPlayers[gameCode];
                     delete this.games[gameCode];
                 }

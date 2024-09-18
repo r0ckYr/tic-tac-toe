@@ -9,7 +9,7 @@ const connection = new Connection(NETWORK);
 const GAME_WALLET_PRIVATE_KEY = process.env.GAME_WALLET_PRIVATE_KEY;
 const gameWalletKeypair = Keypair.fromSecretKey(bs58.decode(GAME_WALLET_PRIVATE_KEY));
 
-async function Trasnfer(walletAddress: string, amount: number): Promise<boolean> {
+export async function transfer(walletAddress: string, amount: number): Promise<boolean> {
     try {
         if (!walletAddress || !amount) {
             return false;

@@ -59,20 +59,29 @@ async function getWalletAddress(gameCode: string, playerName: string): Promise<s
 
   async function deleteGameAndPlayers(gameCode: string): Promise<boolean> {
     try {
-      const deletedGame = await prisma.paymentDetails.delete({
+      // First, delete all players associated with the game
+      await prisma.player.deleteMany({
+        where: {
+          paymentDetails: {
+            gameCode: gameCode
+          }
+        }
+      });
+  
+      // Then, delete the game itself
+      await prisma.paymentDetails.delete({
         where: { gameCode },
-        include: { players: true },
-      })
+      });
   
       return true;
     } catch (error) {
-      console.error(`Error deleting game ${gameCode} and associated players:`, error)
+      console.error(`Error deleting game ${gameCode} and associated players:`, error);
       return false;
     }
   }
-  
-  export { 
-    addPlayerToGame,
-    getWalletAddress,
-    deleteGameAndPlayers
-  }
+
+export { 
+  addPlayerToGame,
+  getWalletAddress,
+  deleteGameAndPlayers
+}

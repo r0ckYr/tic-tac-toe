@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { codeState, playerState, socketState } from '../atoms/atom';
+import { codeState, playerState, socketState, winnerState } from '../atoms/atom';
 import { useNavigate } from 'react-router-dom';
 
 const xImage = 'X.png';
@@ -11,6 +11,7 @@ const TicTacToe = () => {
     const [code] = useRecoilState(codeState);
     const [player] = useRecoilState(playerState);
     const [socket] = useRecoilState(socketState);
+    const [winner, setWinner] = useRecoilState(winnerState);
 
     const [showInvalidPopup, setShowInvalidPopup] = useState(false);
     const [board, setBoard] = useState<string[][]>([
@@ -19,7 +20,6 @@ const TicTacToe = () => {
         ["E", "E", "E"]
     ]);
     const [currPlayer, setCurrPlayer] = useState<string>("O");
-    const [winner, setWinner] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const triggerPopup = () => {
