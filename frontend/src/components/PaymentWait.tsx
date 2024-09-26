@@ -1,10 +1,11 @@
 import { useRecoilState } from "recoil"
-import { socketState } from "../atoms/atom"
+import { socketState, winnerState } from "../atoms/atom"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const PaymentWait = () => {
     const [socket] = useRecoilState(socketState);
+    const [winner, setWinner] = useRecoilState(winnerState);
     const [transfer, setTransfer] = useState<boolean>(false);
     const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ export const PaymentWait = () => {
 
     return(
         <div>
+            <p className="font-custom font-color2 text-3xl">Winner is {winner}</p>
             {(transfer==true) ? 
                 <div className="left-2 top-2 p-4 bg-slate-700 bg-opacity-5 rounded shadow-lg">
                     <p className="font-custom font-color2 text-3xl">Transfer has been completed</p>

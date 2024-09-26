@@ -59,7 +59,7 @@ export const Landing = () => {
                     <p className="font-custom font-color2 text-3xl">{popupMessage}</p>
                 </div>
             )}
-            <div className='flex flex-col pb-10'>
+            <div className='flex flex-col pb-10 h-screen'>
                 <div className='flex flex-row justify-center'>
                     <div className='text-center'>
                         <img className='w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto' src='tictactoe.png' alt='Icon'/>
