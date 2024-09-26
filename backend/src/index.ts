@@ -10,9 +10,11 @@ const app = express();
 // middlewares
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow requests from this origin
-    methods: 'GET,POST,PUT,DELETE',  // Allowed HTTP methods
-    credentials: true                // Allow credentials like cookies, authorization headers
+    origin: function (origin, callback) {
+        callback(null, origin || '*'); // Allow all origins
+    },
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true
 }));
 
 app.get("/", (req, res) => {
