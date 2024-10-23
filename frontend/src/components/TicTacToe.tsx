@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { codeState, playerState, socketState, winnerState } from '../atoms/atom';
 import { useNavigate } from 'react-router-dom';
+import WinnerPopup from './WinnerPop';
 
 const xImage = 'X.png';
 const oImage = 'O.png';
@@ -104,28 +105,32 @@ const TicTacToe = () => {
 
     return (
         <>
-            {showInvalidPopup && (
-                <div className="left-2 top-2 p-4 bg-slate-700 bg-opacity-5 rounded shadow-lg">
-                    <p className="font-custom font-color2 text-3xl">Invalid move!!</p>
-                </div>
-            )}
-            <div className="flex flex-col items-center justify-center min-h-screen bg-transparent">
-                <h1 className="text-8xl font-bold mb-8 font-custom font-color2">Tic Tac Toe</h1>
-                <div className="grid grid-cols-3 gap-4 mb-4 p-4 rounded-xl backdrop-filter backdrop-blur-sm">
-                    {board && board.map((row, i) => 
-                        row.map((_, j) => renderSquare(i, j))
+            {(winner) ? <WinnerPopup player={winner}/> : 
+                <>
+                    {showInvalidPopup && (
+                        <div className="left-2 top-2 p-4 bg-slate-700 bg-opacity-5 rounded shadow-lg">
+                            <p className="font-custom font-color2 text-3xl">Invalid move!!</p>
+                        </div>
                     )}
-                </div>
-                {winner ? (
-                    <div className="text-4xl font-bold mb-4 font-custom font-color">{winner}</div>
-                ) : (
-                    <div className="text-4xl font-bold mb-4 font-custom font-color">
-                        {currPlayer === player ? "Your turn" : "Opponent's turn"}
+                    <div className="flex flex-col items-center justify-center min-h-screen bg-transparent">
+                        <h1 className="text-8xl font-bold mb-8 font-custom font-color2">Tic Tac Toe</h1>
+                        <div className="grid grid-cols-3 gap-4 mb-4 p-4 rounded-xl backdrop-filter backdrop-blur-sm">
+                            {board && board.map((row, i) => 
+                                row.map((_, j) => renderSquare(i, j))
+                            )}
+                        </div>
+                        {winner ? (
+                            <div className="text-4xl font-bold mb-4 font-custom font-color">{winner}</div>
+                        ) : (
+                            <div className="text-4xl font-bold mb-4 font-custom font-color">
+                                {currPlayer === player ? "Your turn" : "Opponent's turn"}
+                            </div>
+                        )}
+                        <div className="text-2xl font-bold mb-4 font-custom font-color2">You are: {player}</div>
+                        <div className="text-2xl font-bold mb-4 font-custom font-color3">Game Code: {code}</div>
                     </div>
-                )}
-                <div className="text-2xl font-bold mb-4 font-custom font-color2">You are: {player}</div>
-                <div className="text-2xl font-bold mb-4 font-custom font-color3">Game Code: {code}</div>
-            </div>
+                </>
+            }
         </>
     );
 };

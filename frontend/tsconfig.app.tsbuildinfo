@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/types.d.ts","./src/vite-env.d.ts","./src/atoms/atom.ts","./src/backendCalls/initGame.ts","./src/backendCalls/makeMove.ts","./src/components/PaymentWait.tsx","./src/components/TicTacToe.tsx","./src/components/WalletConnect.tsx","./src/pages/GamePage.tsx","./src/pages/Landing.tsx"],"version":"5.6.2"}
