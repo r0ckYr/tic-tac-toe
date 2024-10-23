@@ -5,12 +5,14 @@ import { useRecoilState } from 'recoil';
 import { socketState } from './atoms/atom';
 import { Landing } from './pages/Landing';
 import { GamePage } from './pages/GamePage';
+const BACKENDURL = process.env.BACKENDURL || 'localhost:3000';
 
 function App() {
   const [_socket, setSocket] = useRecoilState(socketState);
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:3000');
+    // const ws = new WebSocket('ws://localhost:3000');
+    const ws = new WebSocket('ws://'+BACKENDURL);
     ws.onopen = () => {
       console.log('Connected to WebSocket server');
       setSocket(ws);
