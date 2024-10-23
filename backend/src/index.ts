@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 
 import { GameManager } from './GameManager';
-const verifyPayment = require('./routes/verifyPayment');
 
 const app = express();
 
@@ -22,7 +21,6 @@ app.get("/", (req, res) => {
         message: "hello"
     });
 });
-app.use("/api", verifyPayment);
 
 const httpServer = app.listen(3000);
 

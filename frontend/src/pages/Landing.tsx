@@ -1,11 +1,14 @@
 import '../App.css';
 import { initGame } from '../backendCalls/initGame';
 import { useNavigate } from 'react-router-dom';
-import { codeState, socketState, playerState } from '../atoms/atom';
+import { codeState, socketState, playerState, publicKeyState } from '../atoms/atom';
 import { useRecoilState } from 'recoil';
 import { useEffect, useState } from 'react';
+import { getJWT, removeJWT } from '../utils/jwt-storage';
+import { verifyToken } from '../utils/ verify-tokens';
 
 export const Landing = () => {
+    const [_publicKey, setPublicKey] = useRecoilState(publicKeyState);
     const [code, setCode] = useRecoilState(codeState);
     const [socket, _setSocket] = useRecoilState(socketState);
     const [_player, setPlayer] = useRecoilState(playerState);
@@ -17,6 +20,31 @@ export const Landing = () => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCode(event.target.value);
     };
+
+    useEffect(() => {
+        const verify = async () => {
+          try {
+            const token = getJWT();
+            if (token == null) {
+                window.location.href = "https://nixarcade.fun";
+                return;
+            }
+            const data = await verifyToken(token, "apisecret");
+            if (data == null || data.verified == false) {
+              window.location.href = "https://nixarcade.fun";
+            } else {
+              setPublicKey(data.publicKey);
+              removeJWT();
+            }
+          } catch (e) {
+            console.error("Error verifying token:", e);
+            alert("Token Verification Failed");
+            window.location.href = "https://nixarcade.fun";
+            console.log(e);
+          }
+        };
+        verify();
+      }, []);
 
     const triggerPopup = () => {
         setShowPopup(true);

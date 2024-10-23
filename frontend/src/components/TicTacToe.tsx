@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { codeState, playerState, socketState, winnerState } from '../atoms/atom';
+import { codeState, playerState, publicKeyState, socketState, winnerState } from '../atoms/atom';
 import { useNavigate } from 'react-router-dom';
 import WinnerPopup from './WinnerPop';
+import { getJWT } from '../utils/jwt-storage';
+import { transfer } from '../utils/payments';
 
 const xImage = 'X.png';
 const oImage = 'O.png';
@@ -22,6 +24,7 @@ const TicTacToe = () => {
     ]);
     const [currPlayer, setCurrPlayer] = useState<string>("O");
     const navigate = useNavigate();
+    const [publicKey] = useRecoilState(publicKeyState);
 
     const triggerPopup = () => {
         setShowInvalidPopup(true);
@@ -45,10 +48,15 @@ const TicTacToe = () => {
                         setBoard(message.board);
                         setCurrPlayer(message.chance);
                         if(message.gameEnds) {
+                            const token = getJWT() || "";
                             if(message.winner!="E") {
                                 setWinner("Winner: " + message.winner);
+                                if(message.winner==player) {
+                                    transfer(publicKey, token, "0.02", "apiSecret");
+                                }
                             } else {
                                 setWinner("Draw");
+                                transfer(publicKey, token, "0.01", "apiSecret");
                             }
                         }
                     } else {

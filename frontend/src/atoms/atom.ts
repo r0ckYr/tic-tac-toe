@@ -24,3 +24,8 @@ export const winnerState = atom<string | null>({
     key: 'winnerState',
     default: null,
 });
+
+export const publicKeyState = atom({
+    key: "publicKeyState",
+    default: "",
+  });

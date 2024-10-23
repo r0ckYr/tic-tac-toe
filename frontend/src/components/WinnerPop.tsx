@@ -43,14 +43,13 @@ const WinnerPopup: React.FC<WinnerPopupProps> = ({ player }) => {
         {/* Set a high z-index */}
         {/* Popup animations */}
         <h2 className="text-3xl font-color text-gray-800">
-          🎉 {player} Wins! 🎉
+          🎉 {player} 🎉
         </h2>
         <img
           src="/icon.png" // Update this with your own trophy image
           alt="Winner Trophy"
           className="w-32 h-32 mx-auto my-6 animate-spin-slow"
         />
-        <p className="text-white"></p>
         <button
           onClick={()=>{
             window.location.href="https://nixarcade.fun"
