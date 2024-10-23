@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
-import { useNavigate } from "react-router-dom";
 
 interface WinnerPopupProps {
   player: string;
 }
 
 const WinnerPopup: React.FC<WinnerPopupProps> = ({ player }) => {
-  const navigate = useNavigate();
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
