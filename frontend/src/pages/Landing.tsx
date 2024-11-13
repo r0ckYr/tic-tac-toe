@@ -8,7 +8,7 @@ import { getJWT, removeJWT } from '../utils/jwt-storage';
 import { verifyToken } from '../utils/ verify-tokens';
 
 export const Landing = () => {
-    const [_publicKey, setPublicKey] = useRecoilState(publicKeyState);
+    const [publicKey, setPublicKey] = useRecoilState(publicKeyState);
     const [code, setCode] = useRecoilState(codeState);
     const [socket, _setSocket] = useRecoilState(socketState);
     const [_player, setPlayer] = useRecoilState(playerState);
@@ -109,7 +109,7 @@ export const Landing = () => {
                         className='font-custom font-color text-3xl p-4 focus:outline-none rounded-full border hover:bg-black'
                         onClick={()=>{
                             if(!socket) return;
-                            initGame(socket, code);
+                            initGame(socket, code, publicKey);
                         }}
                         >
                         Enter Game

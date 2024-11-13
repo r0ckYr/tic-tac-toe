@@ -1,8 +1,13 @@
 import { WebSocket } from "ws";
 import { TicBoard, GameBoard } from "./Game";
+import { makeTransaction } from "./utils/makeTransaction";
 
 interface GamePlayerCollection {
     [key: string]: WebSocket[];
+};
+
+interface GameKeyPlayersCollection {
+    [key: string]: string[];
 };
 
 interface GameCollection {
@@ -12,10 +17,12 @@ interface GameCollection {
 export class GameManager {
     private games: GameCollection = {};
     private gamesPlayers: GamePlayerCollection = {};
+    private gamesPlayersKeys: GameKeyPlayersCollection = {};
 
     constructor() {
         this.games = {};
         this.gamesPlayers = {};
+        this.gamesPlayersKeys = {};
     }
 
     handleMessages(socket: WebSocket) {
@@ -24,6 +31,7 @@ export class GameManager {
 
             if(message.type === "init_game") {
                 const gameCode: string = message.gameCode;
+                const publicKey: string = message.publicKey;
 
                 // To check if code already in use
                 if(this.games[gameCode]) {
@@ -35,6 +43,7 @@ export class GameManager {
 
                 if(!this.gamesPlayers[gameCode]) {
                     this.gamesPlayers[gameCode] = [];
+                    this.gamesPlayersKeys[gameCode] = [];
                 }
 
                 // If the user (socket) already exists
@@ -48,10 +57,11 @@ export class GameManager {
                 }
 
                 this.gamesPlayers[gameCode]?.push(socket);
+                this.gamesPlayersKeys[gameCode]?.push(publicKey);
                 const noOfPlayers = this.gamesPlayers[gameCode]?.length;
 
                 if(noOfPlayers === 2) {
-                    const gamePlayers = this.gamesPlayers[gameCode] || [];
+                    const gamePlayers = this.gamesPlayers[gameCode] || [];//-----------------------------------------
                     const game = new TicBoard(gameCode);
                     gamePlayers[0]?.send(JSON.stringify({
                         type: "init_game",
@@ -94,24 +104,23 @@ export class GameManager {
                 gamePlayers[0]?.send(JSON.stringify(res));
                 gamePlayers[1]?.send(JSON.stringify(res));
 
-                // if(res && res.gameEnds==true) {
-                //     const success = await handleGameEnd(res, gameCode+"tictactoe");
+                if(res && res.gameEnds==true) {
+                    let winnerPublicKey = [""];
+                    if(res.winner=="O") {
+                        winnerPublicKey.push(this.gamesPlayersKeys[gameCode][0]);
+                    } else if(res.winner=="X") {
+                        winnerPublicKey.push(this.gamesPlayersKeys[gameCode][1]);
+                    } else {
+                        winnerPublicKey.push(this.gamesPlayersKeys[gameCode][0]);
+                        winnerPublicKey.push(this.gamesPlayersKeys[gameCode][1]);
+                    }
 
-                //     if(success) {
-                //         gamePlayers[0]?.send(JSON.stringify({
-                //             type: "transfer_success"
-                //         }))
-                //         gamePlayers[1]?.send(JSON.stringify({
-                //             type: "transfer_success"
-                //         }))
-                //     } else {
-                //         // add some logic hare
-                //         console.log("payment uncessfull");
-                //     }
+                    makeTransaction(winnerPublicKey, 0.002);
 
-                //     delete this.gamesPlayers[gameCode];
-                //     delete this.games[gameCode];
-                // }
+                    delete this.gamesPlayers[gameCode];
+                    delete this.games[gameCode];
+                    delete this.gamesPlayersKeys[gameCode];
+                }
             }
         });
     };
