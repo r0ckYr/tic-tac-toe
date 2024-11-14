@@ -29,11 +29,19 @@ function App() {
   }, [setSocket]);
 
   return (
-    <div style={{
-      backgroundImage: "url('back.jpg')",
-      position: 'sticky',
-      top: '0px'
-    }}>
+    <div style={{ position: 'relative', minHeight: '100vh' }}>
+      <div style={{
+        backgroundImage: "url('back.jpg')",
+        position: 'fixed',
+        backgroundRepeat: 'repeat-x',
+        backgroundSize: 'cover',
+        top: '0',
+        left: '0',
+        width: '100vw',
+        height: '100vh',
+        zIndex: '-1'
+      }} />
+      
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Landing />} />
@@ -42,6 +50,7 @@ function App() {
       </BrowserRouter>
     </div>
   )
+  
 }
 
 export default App

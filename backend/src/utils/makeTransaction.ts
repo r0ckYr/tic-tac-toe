@@ -2,11 +2,6 @@ import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, System
 import { transfer } from "./transaction";
 
 export const makeTransaction = async (publicKey: string[], amount: number) => {
-    const privateKeyString = process.env.PRIVATE_KEY;
-    if (!privateKeyString) {
-        throw new Error("Private key not found in environment variables");
-    }
-
     let amountPerRecipient;
     if(publicKey.length==2) {
         amountPerRecipient = amount / 2;

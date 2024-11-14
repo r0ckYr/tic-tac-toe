@@ -9,8 +9,8 @@ export const transfer = async (walletAddress: string, amount: number, apiSecret:
         { walletAddress, token, amount },
         {
           headers: {
-            "x-api-secret": apiSecret, // Pass the API secret for verification
-            "Content-Type": "application/json", // Set the content type explicitly
+            "x-api-secret": apiSecret,
+            "Content-Type": "application/json",
           },
         },
       );

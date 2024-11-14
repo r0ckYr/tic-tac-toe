@@ -87,15 +87,15 @@ export const Landing = () => {
                     <p className="font-custom font-color2 text-3xl">{popupMessage}</p>
                 </div>
             )}
-            <div className='flex flex-col pb-10 h-screen'>
+            <div className='flex flex-col lg:pb-10 h-screen'>
                 <div className='flex flex-row justify-center'>
                     <div className='text-center'>
                         <img className='w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto' src='tictactoe.png' alt='Icon'/>
-                        <h1 className='font-custom font-color text-5xl' >Welcome to Tic Tac Toe</h1>
+                        <h1 className='font-custom font-color text-5xl p-10' >Welcome to Tic Tac Toe</h1>
                     </div>
                 </div>
-                <div className='flex flex-row justify-center mt-16'>
-                    <p className='font-custom font-color text-3xl mr-20'>Enter the code: </p>
+                <div className='flex lg:flex-row justify-center lg:mt-16 flex-col items-center'>
+                    <p className='font-custom font-color text-3xl lg:mr-20'>Enter the code: </p>
                     <input 
                         className='bg-black font-custom font-color text-3xl border-2 rounded'
                         onChange={(e)=>{

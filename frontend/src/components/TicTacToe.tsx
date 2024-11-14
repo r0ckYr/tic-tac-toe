@@ -108,13 +108,13 @@ const TicTacToe = () => {
         <>
             {(winner) ? <WinnerPopup player={winner}/> : 
                 <>
-                    {showInvalidPopup && (
-                        <div className="left-2 top-2 p-4 bg-slate-700 bg-opacity-5 rounded shadow-lg">
-                            <p className="font-custom font-color2 text-3xl">Invalid move!!</p>
-                        </div>
-                    )}
                     <div className="flex flex-col items-center justify-center min-h-screen bg-transparent">
-                        <h1 className="text-8xl font-bold mb-8 font-custom font-color2">Tic Tac Toe</h1>
+                        <h1 className="lg:text-8xl text-5xl font-bold mb-8 font-custom font-color2">Tic Tac Toe</h1>
+                        {showInvalidPopup && (
+                            <div className="left-2 top-2 bg-slate-700 bg-opacity-5 rounded shadow-lg">
+                                <p className="font-custom font-color2 text-3xl">Invalid move!!</p>
+                            </div>
+                        )}
                         <div className="grid grid-cols-3 gap-4 mb-4 p-4 rounded-xl backdrop-filter backdrop-blur-sm">
                             {board && board.map((row, i) => 
                                 row.map((_, j) => renderSquare(i, j))
